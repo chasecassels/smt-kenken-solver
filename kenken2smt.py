@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 
-import fileinput
-import textwrap
 import sys
-import csv
 
 def get_region_data(): 
 
