@@ -11,7 +11,7 @@ def get_region_data():
     entries = []
     variables = ["V" + str(i) for i in range(49)]
 
-    with open(sys.argv[2], 'r') as file:
+    with open(sys.argv[1], 'r') as file:
         puzzle = file.read()
 
     lines = puzzle.split('\n')
@@ -24,7 +24,7 @@ def get_region_data():
 
     #isolate region operation and target and add to dictionary with relevent variables (cells)
     for i, entry in enumerate(entries):
-        region_number = int(entry.split('.')[0][1:])
+        region = int(entry.split('.')[0][1:])
         parts = entry.split('.')
 
         if len(parts) > 1:
@@ -34,14 +34,14 @@ def get_region_data():
         else:
             target_operation = None
         
-        if region_number not in regions:
-            regions[region_number] = []
+        if region not in regions:
+            regions[region] = []
         
         if target_operation is not None:
-            regions[region_number].append(operation)
-            regions[region_number].append(target)
+            regions[region].append(operation)
+            regions[region].append(target)
 
-        regions[region_number].append(variables[i])
+        regions[region].append(variables[i])
 
     return regions
 
@@ -85,7 +85,7 @@ def generate_constraint_list(regions):
     return cnf_content
 
 def write_to_output(cnf_content):
-    w = open(sys.argv[1],"w")
+    w = open(sys.argv[2],"w")
     w.write(cnf_content)
 
 regions = get_region_data()
