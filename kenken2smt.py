@@ -5,18 +5,48 @@ import textwrap
 import sys
 import csv
 
-#WORK IN PROGRESS
-#Generate constraint for a region
-def generate_constraint(region, value):
-    variables = [f"V{i}" for i in region]
-    clauses = []
-    for i in range(len(variables)):
-        for j in range(i+1, len(variables)):
-            clauses.append(f"(or (= {value} (- {variables[i]} {variables[j]})) (= {value} (- {variables[j]} {variables[i]})))")
-    return clauses
+def get_region_data(): 
+
+    regions = {}
+    entries = []
+    variables = ["V" + str(i) for i in range(49)]
+
+    with open(sys.argv[2], 'r') as file:
+        puzzle = file.read()
+
+    lines = puzzle.split('\n')
+
+    while lines and lines[-1].strip() == "":
+        lines.pop()
+    
+    for line in lines[1:]:
+        entries.extend(line.split(','))
+
+    #isolate region operation and target and add to dictionary with relevent variables (cells)
+    for i, entry in enumerate(entries):
+        region_number = int(entry.split('.')[0][1:])
+        parts = entry.split('.')
+
+        if len(parts) > 1:
+            target_operation = parts[1]
+            target = target_operation[:-1]
+            operation = target_operation[-1]     
+        else:
+            target_operation = None
+        
+        if region_number not in regions:
+            regions[region_number] = []
+        
+        if target_operation is not None:
+            regions[region_number].append(operation)
+            regions[region_number].append(target)
+
+        regions[region_number].append(variables[i])
+
+    return regions
 
 #Generate list of constraints
-def generate_constraint_list():
+def generate_constraint_list(regions):
     
     #Setup, declare variables
     cnf_content= "(set-logic UFNIA)\n(set-option :produce-models true)\n(set-option :produce-assignments true)"
@@ -36,25 +66,28 @@ def generate_constraint_list():
     for i in range(7):
         cnf_content += ("\n(assert (distinct {} ))".format(" ".join(variables[i:i+43:7])))
 
-    #WORK IN PROGRESS
-    #generate regional constraints from puzzle
-    with open(sys.argv[2], 'r') as file:
-        reader = csv.reader(file)
-        next(reader) #skip puzzle description
-        for row in reader:
-            for entry in row:
-                if '.' in entry:
-                    region, value = entry.split('.')
-                    value = int(value[:-1])
-                    region = [int(x[1:]) for x in region.split(',')]
-                    clauses = generate_constraint(region, value)
-                    for clause in clauses:
-                        cnf_content += ("\n(assert " + clause + ")")
+    #region constraints
+    for region, info in regions.items():
+        operation, target, *variables = info
+        variables_str = ' '.join(variables)
+        if operation == '*':
+            cnf_content += (f"\n(assert (= {target} (* {variables_str}))) ; Region {region}")
+        elif operation == '-':
+            cnf_content += (f"\n(assert (or (= {target} (- {variables[0]} {variables[1]})) (= {target} (- {variables[1]} {variables[0]})))) ; Region {region}")
+        elif operation == '+':
+            cnf_content += (f"\n(assert (= {target} (+ {variables_str}))) ; Region {region}")
+        elif operation == '/':
+            cnf_content += (f"\n(assert (or (= {target} (/ {variables[0]} {variables[1]})) (= {target} (/ {variables[1]} {variables[0]})))) ; Region {region}")
+    
+    #wrap up
+    cnf_content += "\n(check-sat)\n(get-value ({}))\n(exit)".format(" ".join("V" + str(i) for i in range(49)))
+
     return cnf_content
 
 def write_to_output(cnf_content):
     w = open(sys.argv[1],"w")
     w.write(cnf_content)
 
-cnf_content = generate_constraint_list()
+regions = get_region_data()
+cnf_content = generate_constraint_list(regions)
 write_to_output(cnf_content)
