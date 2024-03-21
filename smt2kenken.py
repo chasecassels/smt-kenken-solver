@@ -25,7 +25,7 @@ def main(file_path):
     assignments = parse_smt_output(smt_output)
     solution_string = format_solution(assignments)
     #Print statement for formating our solution.txt
-    print(f"#kenken www.kenkenpuzzle.com Puzzle 22395 7x7 Medium SOLUTION\n{solution_string}")
+    print(f"{solution_string}")
 
 
 if __name__ == "__main__":    
