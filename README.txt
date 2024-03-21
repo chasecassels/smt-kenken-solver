@@ -17,4 +17,4 @@ operation in a way that produces the target value. To generate a solved puzzle m
 
 1. $ kenken2smt.py puzzle.txt puzzle.smt
 2. $ mathsat puzzle.smt > model.smt
-
+3. $ python3 smt2kenken.py model.smt > solution.txt
