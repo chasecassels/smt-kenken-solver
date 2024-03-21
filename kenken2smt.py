@@ -5,7 +5,7 @@ import textwrap
 import sys
 import csv
 
-#WORK IN PROGRESS - MAKES NO SENSE RN
+#WORK IN PROGRESS
 #Generate constraint for a region
 def generate_constraint(region, value):
     variables = [f"V{i}" for i in region]
@@ -36,7 +36,7 @@ def generate_constraint_list():
     for i in range(7):
         cnf_content += ("\n(assert (distinct {} ))".format(" ".join(variables[i:i+43:7])))
 
-    #WORK IN PROGRESS - MAKES NO SENSE RN
+    #WORK IN PROGRESS
     #generate regional constraints from puzzle
     with open(sys.argv[2], 'r') as file:
         reader = csv.reader(file)
