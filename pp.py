@@ -14,7 +14,7 @@ H = []
 def get_json():
   puzzle = sys.argv[1]
   p = subprocess.run(["./fetch.sh {}".format(puzzle)], shell=True, capture_output=True)
-  result = str(p.sdtout)
+  result = str(p.stdout)
   result = result.decode("ASCII")
   return result
 
