@@ -58,6 +58,8 @@ def parse_result(json):
       T[i][j] = T[i][j].lstrip(" ")
   
 
+  T = remove_empty(T)
+
   create_output(A,T,S,V,H)
 
 
@@ -85,11 +87,15 @@ def create_output(values,result,symbol,wall,floor):
       if op == '0' or op =='1':
         if len(total) == 2:
           row1 += "   "
+        elif len(total) == 3:
+          row1 += "  "
         else:
           row1 += "    "
       else:
         if len(total) == 2:
           row1 += op + '  '
+        elif len(total) == 3:
+          row1 += op + " "
         else:
           row1+= op + '   '
 
@@ -132,6 +138,9 @@ def get_row3(floor,index):
       row3 += "-----" + "+"
   return row3
 
+def remove_empty(lst):
+  cleaned_list = [[x for x in sublist if x != ''] for sublist in lst]
+  return cleaned_list
 
 
 def main():
