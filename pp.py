@@ -40,7 +40,7 @@ def parse_result(json):
   
   
   A = [i.split(' ') for i in A_list if not i == '']
-  T = [i.split('  ') for i in T_list if not i == '']
+  T = [i.split(' ') for i in T_list if not i == '']
   S = [i.split(' ') for i in S_list if not i == '']
   V = [i.split(' ') for i in V_list if not i == '']
   H = [i.split(' ') for i in H_list if not i == '']
