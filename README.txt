@@ -18,3 +18,13 @@ operation in a way that produces the target value. To generate a solved puzzle m
 1. $ kenken2smt.py puzzle.txt puzzle.smt
 2. $ mathsat puzzle.smt > model.smt
 3. $ python3 smt2kenken.py model.smt > solution.txt
+
+
+pp.py:
+
+pp.py takes a single 7x7 puzzle number as input and prints a visual representation of the solution to the console.
+pp.py is only configured to accept 7x7 puzzles. To run pp.py follow these instructions:
+
+1. $ chmod +x ./fetch.sh   (this is necessary as pp.py requires permission to run fetch.sh)
+2. $ python3 pp.py puzzle_number
+

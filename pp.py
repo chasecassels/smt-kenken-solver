@@ -4,10 +4,7 @@ import subprocess
 
 row3s = []
 
-
-#result = b'{"id":22395,"data":"A\r\n1 2 3 6 7 5 4 \r\n6 4 2 7 5 3 1 \r\n7 5 6 2 1 4 3 \r\n2 1 7 4 3 6 5 \r\n4 7 5 3 2 1 6 \r\n5 3 4 1 6 2 7 \r\n3 6 1 5 4 7 2 \r\nT\r\n  2   0   2   0  35   1   0\r\n  6   2   0  10   0   3   0\r\n 14   4   1   0   0  72   2\r\n  0   0   0   1   0   0   0\r\n 60  35   0   0   3   1  13\r\n  0  18   3   0   0  11   0\r\n  0   0   0   9   0   0   0\r\nS\r\n/ 0 / 0 * - 0\r\n1 - 0 + 0 / 0\r\n* - - 0 0 * -\r\n0 0 0 - 0 0 0\r\n* * 0 0 / 1 +\r\n0 * - 0 0 + 0\r\n0 0 0 + 0 0 0\r\nV\r\n0 1 0 1 1 0\r\n1 0 1 1 1 0\r\n1 1 1 0 1 1\r\n1 1 1 1 0 1\r\n1 0 1 1 1 1\r\n1 1 0 1 1 1\r\n1 0 1 0 1 0\r\nH\r\n1 1 0 1 0 0\r\n1 1 0 1 1 0\r\n1 1 0 1 1 1\r\n1 0 1 0 1 1\r\n0 1 1 1 0 1\r\n1 1 0 1 1 0\r\n1 1 0 1 0 1\r\n\r\n","size":7,"level":"medium","operations":"adms","no":22395,"guest":false,"daily":false,"state":null,"u_level":"B"}'
-#result = result.decode("ASCII")
-
+#fetches the json using fetch.sh
 def get_json():
   puzzle = sys.argv[1]
   p = subprocess.run(["./fetch.sh {}".format(puzzle)], shell=True, capture_output=True)
@@ -15,6 +12,7 @@ def get_json():
   result = result.decode("ASCII")
   return result
 
+#parses the json into 5 arrays
 def parse_result(json):
   A_location = json.index('A')
   T_location = json.index('T')
@@ -40,13 +38,6 @@ def parse_result(json):
   V_list = V_string.split("\\r\\n")
   H_list = H_string.split("\\r\\n")
   
-  """ 
-  A_list = A_string.split("\r\n")
-  T_list = T_string.split("\r\n")
-  S_list = S_string.split("\r\n")
-  V_list = V_string.split("\r\n")
-  H_list = H_string.split("\r\n")
-  """
   
   A = [i.split(' ') for i in A_list if not i == '']
   T = [i.split('  ') for i in T_list if not i == '']
@@ -67,17 +58,11 @@ def parse_result(json):
       T[i][j] = T[i][j].lstrip(" ")
   
 
-  print(A)
-  print(T)
-  print(S)
-  print(V)
-  print(H)
-
   create_output(A,T,S,V,H)
 
 
 
-
+#creates the output basedon the contents of the arrays
 def create_output(values,result,symbol,wall,floor):
   limit = len(values)
   print("\033[92m"+ "+=========================================+"+ "\033[0m")
@@ -137,7 +122,7 @@ def create_output(values,result,symbol,wall,floor):
 
 
 
-
+# a helper function to generate the row floors
 def get_row3(floor,index):
   row3 =  "+" 
   for i in range(7):
