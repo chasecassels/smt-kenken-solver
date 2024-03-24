@@ -15,7 +15,7 @@ use for loops to generate the list of necessary constraints: no repeats in any c
 must be between 1 and 7 inclusive, and the values for each region must be able to combine with the given 
 operation in a way that produces the target value. To generate a solved puzzle model.smt, we run:
 
-1. $ kenken2smt.py puzzle.txt puzzle.smt
+1. $ python3 kenken2smt.py puzzle.txt puzzle.smt
 2. $ mathsat puzzle.smt > model.smt
 3. $ python3 smt2kenken.py model.smt > solution.txt
 
