@@ -6,6 +6,8 @@ Joshua Lee V00875102
 Bipasa Agrawal V00936703
 
 
+Please use python3 when running all three programs
+
 kenken2smt:
 
 kenken2smt takes a kenken puzzle input in the format seen in 22395-puzzle.txt and generates the clause 
